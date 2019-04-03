@@ -1,7 +1,6 @@
 package com.xmut.hotel.test;
 
 
-import com.xmut.hotel.dao.data.GetDataList11;
 import com.xmut.hotel.information.Room;
 import com.xmut.hotel.service.GetDataJSONArray;
 import com.xmut.hotel.service.GetDataList;
@@ -21,7 +20,7 @@ public class TestData {
         GetDataJSONArray getDataJSONArray = new GetDataJSONArrayImp();
         GetDataList getDataList = new GetDataListImp();
         List<Room> list = getDataList.getRoomList();
-        JSONArray jsonArray = getDataJSONArray.getRoomJSONArray(list);
+        JSONArray jsonArray = getDataJSONArray.getRoomJSONArray();
         System.out.println(jsonArray.toString());
         /*GetDataList11 getData = new GetDataList11();
         List<Room> list = new ArrayList<>();

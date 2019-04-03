@@ -13,6 +13,7 @@ public class GetDataListImp implements GetDataList {
 
     private ResultSet resultSet;
     private ConnectionControl connectionControl;
+    private String sql = "SELECT * FROM ";
 
     public GetDataListImp(){
         try {
@@ -26,7 +27,7 @@ public class GetDataListImp implements GetDataList {
     @Override
     public List<Room> getRoomList() {
         List<Room> list = new ArrayList<>();
-        resultSet = connectionControl.getResultSet("room");
+        resultSet = connectionControl.getResultSet(sql +"room");
         try {
             while(resultSet.next()){
                 Room room = new Room();
@@ -34,6 +35,7 @@ public class GetDataListImp implements GetDataList {
                 room.setName(resultSet.getString("roomName"));
                 room.setPrice(resultSet.getDouble("roomPrice"));
                 list.add(room);
+                //connectionControl.closeAll();
             }
         } catch (Exception e) {
             e.printStackTrace();

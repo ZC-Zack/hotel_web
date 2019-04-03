@@ -13,15 +13,14 @@ public class ConnectionControl {
 
     private String url="jdbc:mysql://118.24.221.92:3306/hotel";
     private String username = "root", password = "root";
-    private String sql = "SELECT * FROM ";
 
     public ConnectionControl() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.jdbc.Driver");
         connection = DriverManager.getConnection(url, username, password);
     }
 
-    public ResultSet getResultSet(String data){
-        sql += data;
+    public ResultSet getResultSet(String sql){
+        System.out.println(sql);
         try {
             preparedStatement = connection.prepareStatement(sql);
             resultSet = preparedStatement.executeQuery();
@@ -32,7 +31,21 @@ public class ConnectionControl {
         }
         return null;
     }
+    public void closeAll() throws SQLException {
+        if(resultSet != null){
+            resultSet.close();
+        }
+        if(preparedStatement != null){
+            preparedStatement.close();
+        }
+        if(connection != null){
+            connection.close();
+        }
+    }
 
+    public ResultSet getResultSet(){
+        return resultSet;
+    }
 
 
 }

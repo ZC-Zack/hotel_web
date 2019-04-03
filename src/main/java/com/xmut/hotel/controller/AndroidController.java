@@ -39,6 +39,7 @@ public class AndroidController {
     @ResponseBody
     public JSONArray getRoom(){
         jsonArray = getDataJSONArray.getRoomJSONArray();
+
         return  jsonArray;
     }
 }
