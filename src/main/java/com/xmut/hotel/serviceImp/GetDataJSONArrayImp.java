@@ -23,4 +23,5 @@ public class GetDataJSONArrayImp implements GetDataJSONArray {
         jsonArray = JSONArray.fromObject(roomList);
         return jsonArray;
     }
+
 }
