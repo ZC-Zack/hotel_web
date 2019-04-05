@@ -1,5 +1,7 @@
 package com.xmut.hotel.dao.jdbc;
 
+import net.sf.json.JSONObject;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,8 +13,9 @@ public class ConnectionControl {
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
 
-    private String url="jdbc:mysql://118.24.221.92:3306/hotel";
+    private String url="jdbc:mysql://localhost:3306/hotel";
     private String username = "root", password = "root";
+    private String sqlInsert = "INSERT INTO apply (userId, friendId) VALUES (?, ?)";
 
     public ConnectionControl() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.jdbc.Driver");
@@ -31,21 +34,22 @@ public class ConnectionControl {
         }
         return null;
     }
-    public void closeAll() throws SQLException {
-        if(resultSet != null){
-            resultSet.close();
-        }
-        if(preparedStatement != null){
-            preparedStatement.close();
-        }
-        if(connection != null){
-            connection.close();
-        }
-    }
 
     public ResultSet getResultSet(){
         return resultSet;
     }
 
+    public int setApply(JSONObject json){
+        int resulte = 0;
+        try {
+            preparedStatement = connection.prepareStatement(sqlInsert);
+            preparedStatement.setString(1, String.valueOf(json.get("userId")));
+            preparedStatement.setString(2, String.valueOf(json.get("friendId")));
+            resulte = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resulte;
+    }
 
 }
