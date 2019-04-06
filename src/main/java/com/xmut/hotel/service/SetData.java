@@ -4,4 +4,5 @@ import net.sf.json.JSONObject;
 
 public interface SetData {
     public int setApply(JSONObject json);
+    public int setApplyResult(JSONObject json);
 }

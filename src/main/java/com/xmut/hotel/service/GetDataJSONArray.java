@@ -6,4 +6,5 @@ import net.sf.json.JSONArray;
 public interface GetDataJSONArray {
 
     public JSONArray getRoomJSONArray();
+    public JSONArray getApplyJSONArray(String data);
 }

@@ -23,4 +23,14 @@ public class SetDataImp implements SetData {
     public int setApply(JSONObject json) {
         return control.setApply(json);
     }
+
+    @Override
+    public int setApplyResult(JSONObject json) {
+        int result = 0;
+        control.setResult(json);
+        if("1".equals(String.valueOf(json.getString("result")))){
+            result = control.setNewFriend(json);
+        }
+        return result;
+    }
 }

@@ -1,9 +1,15 @@
 package com.xmut.hotel.controller;
 
+import com.xmut.hotel.information.Apply;
+import com.xmut.hotel.information.Friend;
 import com.xmut.hotel.information.Room;
+import com.xmut.hotel.information.User;
+import com.xmut.hotel.meger.MergeApply;
 import com.xmut.hotel.service.GetDataJSONArray;
+import com.xmut.hotel.service.GetDataList;
 import com.xmut.hotel.service.SetData;
 import com.xmut.hotel.serviceImp.GetDataJSONArrayImp;
+import com.xmut.hotel.serviceImp.GetDataListImp;
 import com.xmut.hotel.serviceImp.SetDataImp;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -25,9 +31,12 @@ public class AndroidController {
     private JSONArray jsonArray;
     private GetDataJSONArray getDataJSONArray;
     private SetData setData;
+    private GetDataList dataList;
+    private MergeApply mergeApply;
 
     public AndroidController(){
         getDataJSONArray = new GetDataJSONArrayImp();
+        mergeApply = new MergeApply();
     }
 
     @RequestMapping(value = "/android",method = RequestMethod.GET)
@@ -52,6 +61,43 @@ public class AndroidController {
     public int setApply(@RequestBody JSONObject jsonObject){
         setData = new SetDataImp();
         return setData.setApply(jsonObject);
+    }
+
+    @RequestMapping(value = "/getApply", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONArray getApply(@RequestBody JSONObject jsonObject){
+
+        String userId = jsonObject.getString("userId");
+        dataList = new GetDataListImp();
+        List<User> userList = dataList.getUserList();
+        List<Apply> applyList = dataList.getApplyList();
+        List<User> users = mergeApply.getApply(userList, applyList, userId);
+        jsonArray = JSONArray.fromObject(users);
+        return jsonArray;
+    }
+
+    @RequestMapping(value = "/friend", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONArray getFriend(@RequestBody JSONObject jsonObject){
+
+        String userId = jsonObject.getString("userId");
+        dataList = new GetDataListImp();
+        List<User> userList = dataList.getUserList();
+        List<Friend> friendList = dataList.getFriendList();
+        List<User> users = mergeApply.getFriend(userList, friendList, userId);
+        jsonArray = JSONArray.fromObject(users);
+        System.out.println("json:"+JSONArray.fromObject(jsonArray).toString());
+        return jsonArray;
+    }
+
+
+    @RequestMapping(value = "/applyResult", method = RequestMethod.POST)
+    @ResponseBody
+    public int setApplyResult(@RequestBody JSONObject jsonObject){
+        System.out.println(jsonObject.toString());
+        setData = new SetDataImp();
+        return setData.setApplyResult(jsonObject);
+        //return 0;
     }
 
 }

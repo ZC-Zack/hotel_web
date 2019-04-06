@@ -16,6 +16,9 @@ public class ConnectionControl {
     private String url="jdbc:mysql://localhost:3306/hotel";
     private String username = "root", password = "root";
     private String sqlInsert = "INSERT INTO apply (userId, friendId) VALUES (?, ?)";
+    private String sqlUpdate = "UPDATE apply SET result = ? WHERE userId = ? AND friendId = ?";
+    private String sql = "SELECT * FROM ";
+    private String sqlInsertFriend = "INSERT INTO friend (userId, friendId) VALUES(?, ?)";
 
     public ConnectionControl() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.jdbc.Driver");
@@ -23,7 +26,6 @@ public class ConnectionControl {
     }
 
     public ResultSet getResultSet(String sql){
-        System.out.println(sql);
         try {
             preparedStatement = connection.prepareStatement(sql);
             resultSet = preparedStatement.executeQuery();
@@ -35,21 +37,50 @@ public class ConnectionControl {
         return null;
     }
 
-    public ResultSet getResultSet(){
-        return resultSet;
-    }
-
     public int setApply(JSONObject json){
-        int resulte = 0;
+        int result = 0;
         try {
-            preparedStatement = connection.prepareStatement(sqlInsert);
+            preparedStatement = connection.prepareStatement(sqlUpdate);
             preparedStatement.setString(1, String.valueOf(json.get("userId")));
             preparedStatement.setString(2, String.valueOf(json.get("friendId")));
-            resulte = preparedStatement.executeUpdate();
+            result = preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return resulte;
+        return result;
+    }
+
+    public int setResult(JSONObject json){
+        int result = 0;
+        result = Integer.parseInt(String.valueOf(json.get("result")));
+        try {
+            preparedStatement = connection.prepareStatement(sqlUpdate);
+            preparedStatement.setInt(1, result);
+            preparedStatement.setString(2, String.valueOf(json.get("userId")));
+            preparedStatement.setString(3, String.valueOf(json.get("friendId")));
+            result = preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public int setNewFriend(JSONObject json){
+        int result = 0;
+        try{
+            preparedStatement = connection.prepareStatement(sqlInsertFriend);
+            preparedStatement.setString(1, String.valueOf(json.get("userId")));
+            preparedStatement.setString(2, String.valueOf(json.get("friendId")));
+            preparedStatement.executeUpdate();
+            preparedStatement = connection.prepareStatement(sqlInsertFriend);
+            preparedStatement.setString(1, String.valueOf(json.get("friendId")));
+            preparedStatement.setString(2, String.valueOf(json.get("userId")));
+            result = preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
 }
