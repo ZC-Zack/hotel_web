@@ -5,9 +5,11 @@ import com.xmut.hotel.information.Friend;
 import com.xmut.hotel.information.Room;
 import com.xmut.hotel.information.User;
 import com.xmut.hotel.meger.MergeApply;
+import com.xmut.hotel.service.CreateTable;
 import com.xmut.hotel.service.GetDataJSONArray;
 import com.xmut.hotel.service.GetDataList;
 import com.xmut.hotel.service.SetData;
+import com.xmut.hotel.serviceImp.CreateTableImp;
 import com.xmut.hotel.serviceImp.GetDataJSONArrayImp;
 import com.xmut.hotel.serviceImp.GetDataListImp;
 import com.xmut.hotel.serviceImp.SetDataImp;
@@ -28,15 +30,18 @@ import java.util.Map;
 @RequestMapping(value = "/")
 public class AndroidController {
     private List<Room> list;
+
     private JSONArray jsonArray;
     private GetDataJSONArray getDataJSONArray;
     private SetData setData;
     private GetDataList dataList;
     private MergeApply mergeApply;
+    private CreateTable createTable;
 
     public AndroidController(){
         getDataJSONArray = new GetDataJSONArrayImp();
         mergeApply = new MergeApply();
+        createTable = new CreateTableImp();
     }
 
     @RequestMapping(value = "/android",method = RequestMethod.GET)
@@ -93,7 +98,6 @@ public class AndroidController {
     @RequestMapping(value = "/applyResult", method = RequestMethod.POST)
     @ResponseBody
     public int setApplyResult(@RequestBody JSONObject jsonObject){
-        System.out.println(jsonObject.toString());
         setData = new SetDataImp();
         return setData.setApplyResult(jsonObject);
         //return 0;
@@ -102,7 +106,6 @@ public class AndroidController {
     @RequestMapping(value = "/send", method = RequestMethod.POST)
     @ResponseBody
     public void setContent(@RequestBody JSONObject jsonObject){
-        //System.out.println(jsonObject.toString());
         setData = new SetDataImp();
         setData.setContent(jsonObject);
     }
@@ -110,10 +113,22 @@ public class AndroidController {
     @RequestMapping(value = "/getContent", method = RequestMethod.POST)
     @ResponseBody
     public JSONArray getContent(@RequestBody JSONObject jsonObject){
-        System.out.println(jsonObject.toString());
         jsonArray = getDataJSONArray.getContentJSONArray(jsonObject);
         return jsonArray;
     }
 
+    @RequestMapping(value = "/getUser", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONArray getUser(){
+        jsonArray = getDataJSONArray.getUserJSONArray();
+        return jsonArray;
+    }
 
+    @RequestMapping(value = "/setUser", method = RequestMethod.POST)
+    @ResponseBody
+    public int setUser(@RequestBody JSONObject json){
+        setData = new SetDataImp();
+        createTable.createUserTable(json);
+        return setData.setUser(json);
+    }
 }

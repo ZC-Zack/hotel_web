@@ -48,4 +48,11 @@ public class SetDataImp implements SetData {
         return 0;
     }
 
+    @Override
+    public int setUser(JSONObject json) {
+        int result = 0;
+        result = control.setUser(json);
+        return result;
+    }
+
 }

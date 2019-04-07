@@ -55,6 +55,7 @@ public class GetDataListImp implements GetDataList {
                 user.setUserId(resultSet.getString("userId"));
                 user.setUserName(resultSet.getString("userName"));
                 user.setSex(resultSet.getString("sex"));
+                user.setPassword(resultSet.getString("password"));
                 userList.add(user);
             }
         }catch (Exception e){
@@ -108,8 +109,10 @@ public class GetDataListImp implements GetDataList {
     public List<Msg> getChatList(JSONObject json) {
         List<Msg> msgList = new ArrayList<>();
         String friendId = (String) json.get("friendId");
+        if("".equals(friendId)){
+            friendId = "1234567891235687566";
+        }
         resultSet = connectionControl.getResultSet(sql + "chat" + json.get("userId") + " WHERE friendId = " + friendId);
-        System.out.println(resultSet);
         try {
             while(resultSet.next()){
                 Msg msg = new Msg();

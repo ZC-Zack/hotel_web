@@ -45,4 +45,11 @@ public class GetDataJSONArrayImp implements GetDataJSONArray {
         return jsonArray;
     }
 
+    @Override
+    public JSONArray getUserJSONArray() {
+        userList = getDataList.getUserList();
+        jsonArray = JSONArray.fromObject(userList);
+        return jsonArray;
+    }
+
 }

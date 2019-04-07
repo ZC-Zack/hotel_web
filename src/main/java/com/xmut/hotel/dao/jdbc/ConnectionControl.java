@@ -13,12 +13,14 @@ public class ConnectionControl {
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
 
-    private String url="jdbc:mysql://localhost:3306/hotel";
+    //private String url="jdbc:mysql://localhost:3306/hotel";
+    private String url = "jdbc:mysql://118.24.221.92:3306/hotel";
     private String username = "root", password = "root";
     private String sqlInsert = "INSERT INTO apply (userId, friendId) VALUES (?, ?)";
     private String sqlUpdate = "UPDATE apply SET result = ? WHERE userId = ? AND friendId = ?";
     private String sql = "SELECT * FROM ";
     private String sqlInsertFriend = "INSERT INTO friend (userId, friendId) VALUES(?, ?)";
+    private String sqlInsertUser = "INSERT INTO user (userId, password, userName) VALUES(?, ?, ?)";
 
     public ConnectionControl() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.jdbc.Driver");
@@ -26,7 +28,6 @@ public class ConnectionControl {
     }
 
     public ResultSet getResultSet(String sql){
-        System.out.println(sql);
         try {
             preparedStatement = connection.prepareStatement(sql);
             resultSet = preparedStatement.executeQuery();
@@ -41,7 +42,7 @@ public class ConnectionControl {
     public int setApply(JSONObject json){
         int result = 0;
         try {
-            preparedStatement = connection.prepareStatement(sqlUpdate);
+            preparedStatement = connection.prepareStatement(sqlInsert);
             preparedStatement.setString(1, String.valueOf(json.get("userId")));
             preparedStatement.setString(2, String.valueOf(json.get("friendId")));
             result = preparedStatement.executeUpdate();
@@ -101,4 +102,33 @@ public class ConnectionControl {
         return result;
     }
 
+    //创建用户表
+    public void createTable(String name){
+        String sql = "CREATE TABLE " + "chat" + name + " (" +
+                "  chartId INT NOT NULL AUTO_INCREMENT," +
+                "  friendId VARCHAR(45) NULL," +
+                "  content VARCHAR(45) NULL," +
+                "  type INT NULL," +
+                "  PRIMARY KEY (chartId))";
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int setUser(JSONObject json){
+        int result = 0;
+        try {
+            preparedStatement = connection.prepareStatement(sqlInsertUser);
+            preparedStatement.setString(1, (String) json.get("userId"));
+            preparedStatement.setString(2, (String) json.get("password"));
+            preparedStatement.setString(3, (String) json.get("userName"));
+            result = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
