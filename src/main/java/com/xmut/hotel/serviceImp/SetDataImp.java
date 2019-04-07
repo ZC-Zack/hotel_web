@@ -1,6 +1,7 @@
 package com.xmut.hotel.serviceImp;
 
 import com.xmut.hotel.dao.jdbc.ConnectionControl;
+import com.xmut.hotel.information.Msg;
 import com.xmut.hotel.service.SetData;
 import net.sf.json.JSONObject;
 
@@ -33,4 +34,18 @@ public class SetDataImp implements SetData {
         }
         return result;
     }
+
+    @Override
+    public int setContent(JSONObject json) {
+        int reuslt = 0;
+        json.put("type", Msg.TYPE_SENT);
+        control.setContent(json);
+        String temp = json.getString("userId");
+        json.put("userId", json.getString("friendId"));
+        json.put("friendId", temp);
+        json.put("type", Msg.TYPE_RECEIVED);
+        control.setContent(json);
+        return 0;
+    }
+
 }

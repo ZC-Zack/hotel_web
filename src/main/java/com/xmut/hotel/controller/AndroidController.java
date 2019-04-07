@@ -52,7 +52,6 @@ public class AndroidController {
     @ResponseBody
     public JSONArray getRoom(){
         jsonArray = getDataJSONArray.getRoomJSONArray();
-
         return  jsonArray;
     }
 
@@ -86,7 +85,7 @@ public class AndroidController {
         List<Friend> friendList = dataList.getFriendList();
         List<User> users = mergeApply.getFriend(userList, friendList, userId);
         jsonArray = JSONArray.fromObject(users);
-        System.out.println("json:"+JSONArray.fromObject(jsonArray).toString());
+        //System.out.println("json:"+JSONArray.fromObject(jsonArray).toString());
         return jsonArray;
     }
 
@@ -99,5 +98,22 @@ public class AndroidController {
         return setData.setApplyResult(jsonObject);
         //return 0;
     }
+
+    @RequestMapping(value = "/send", method = RequestMethod.POST)
+    @ResponseBody
+    public void setContent(@RequestBody JSONObject jsonObject){
+        //System.out.println(jsonObject.toString());
+        setData = new SetDataImp();
+        setData.setContent(jsonObject);
+    }
+
+    @RequestMapping(value = "/getContent", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONArray getContent(@RequestBody JSONObject jsonObject){
+        System.out.println(jsonObject.toString());
+        jsonArray = getDataJSONArray.getContentJSONArray(jsonObject);
+        return jsonArray;
+    }
+
 
 }

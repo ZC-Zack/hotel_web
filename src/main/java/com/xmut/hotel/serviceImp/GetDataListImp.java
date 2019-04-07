@@ -1,12 +1,10 @@
 package com.xmut.hotel.serviceImp;
 
 import com.xmut.hotel.dao.jdbc.ConnectionControl;
-import com.xmut.hotel.information.Apply;
-import com.xmut.hotel.information.Friend;
-import com.xmut.hotel.information.Room;
-import com.xmut.hotel.information.User;
+import com.xmut.hotel.information.*;
 import com.xmut.hotel.service.GetDataList;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -104,5 +102,24 @@ public class GetDataListImp implements GetDataList {
         }
 
         return friendList;
+    }
+
+    @Override
+    public List<Msg> getChatList(JSONObject json) {
+        List<Msg> msgList = new ArrayList<>();
+        String friendId = (String) json.get("friendId");
+        resultSet = connectionControl.getResultSet(sql + "chat" + json.get("userId") + " WHERE friendId = " + friendId);
+        System.out.println(resultSet);
+        try {
+            while(resultSet.next()){
+                Msg msg = new Msg();
+                msg.setContent(resultSet.getString("content"));
+                msg.setType(resultSet.getInt("type"));
+                msgList.add(msg);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return msgList;
     }
 }

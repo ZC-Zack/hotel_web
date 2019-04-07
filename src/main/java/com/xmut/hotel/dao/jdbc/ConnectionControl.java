@@ -26,6 +26,7 @@ public class ConnectionControl {
     }
 
     public ResultSet getResultSet(String sql){
+        System.out.println(sql);
         try {
             preparedStatement = connection.prepareStatement(sql);
             resultSet = preparedStatement.executeQuery();
@@ -80,6 +81,23 @@ public class ConnectionControl {
             e.printStackTrace();
         }
 
+        return result;
+    }
+
+    public int setContent(JSONObject json){
+        int result = 0;
+        String sql = "INSERT INTO ";
+        String value = "(friendId, content, type) VALUES(?, ?, ?)";
+        sql += "chat"+json.get("userId") + value;
+        try{
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, String.valueOf(json.get("friendId")));
+            preparedStatement.setString(2, String.valueOf(json.get("content")));
+            preparedStatement.setInt(3, (Integer) json.get("type"));
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
         return result;
     }
 

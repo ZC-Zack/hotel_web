@@ -17,11 +17,11 @@ public class TestData {
 
     @Test
     public void test(){
-        GetDataJSONArray getDataJSONArray = new GetDataJSONArrayImp();
-        GetDataList getDataList = new GetDataListImp();
-        List<Room> list = getDataList.getRoomList();
-        JSONArray jsonArray = getDataJSONArray.getRoomJSONArray();
-        System.out.println(jsonArray.toString());
+//        GetDataJSONArray getDataJSONArray = new GetDataJSONArrayImp();
+//        GetDataList getDataList = new GetDataListImp();
+//        List<Room> list = getDataList.getRoomList();
+//        JSONArray jsonArray = getDataJSONArray.getRoomJSONArray();
+//        System.out.println(jsonArray.toString());
         /*GetDataList11 getData = new GetDataList11();
         List<Room> list = new ArrayList<>();
         try {
