@@ -1,5 +1,8 @@
 package com.xmut.hotel.dao.jdbc;
 
+import com.xmut.hotel.information.Friend;
+import com.xmut.hotel.service.GetDataList;
+import com.xmut.hotel.serviceImp.GetDataListImp;
 import net.sf.json.JSONObject;
 
 import java.sql.Connection;
@@ -7,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class ConnectionControl {
     private Connection connection;
@@ -68,6 +72,13 @@ public class ConnectionControl {
     }
 
     public int setNewFriend(JSONObject json){
+        GetDataList getDataList = new GetDataListImp();
+        List<Friend> friendList = getDataList.getFriendList();
+        for(Friend friend: friendList){
+            if(friend.getUserId().equals(json.getString("userId")) && friend.getFriendId().equals(json.getString("friendId"))){
+                return 0;
+            }
+        }
         int result = 0;
         try{
             preparedStatement = connection.prepareStatement(sqlInsertFriend);

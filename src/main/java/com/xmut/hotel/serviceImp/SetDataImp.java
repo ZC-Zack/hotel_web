@@ -1,11 +1,14 @@
 package com.xmut.hotel.serviceImp;
 
 import com.xmut.hotel.dao.jdbc.ConnectionControl;
+import com.xmut.hotel.information.Apply;
 import com.xmut.hotel.information.Msg;
+import com.xmut.hotel.service.GetDataList;
 import com.xmut.hotel.service.SetData;
 import net.sf.json.JSONObject;
 
 import java.sql.SQLException;
+import java.util.List;
 
 
 public class SetDataImp implements SetData {
@@ -22,6 +25,14 @@ public class SetDataImp implements SetData {
 
     @Override
     public int setApply(JSONObject json) {
+        GetDataList getDataList = new GetDataListImp();
+        List<Apply> list = getDataList.getApplyList();
+        System.out.println("in");
+        for(Apply apply: list){
+            if(apply.getUserId().equals(json.getString("userId")) && apply.getFriendId().equals(json.getString("friendId")) && apply.getResult() == 0){
+                return 0;
+            }
+        }
         return control.setApply(json);
     }
 
